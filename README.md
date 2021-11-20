@@ -21,3 +21,7 @@
 	* LeftHand Controller > remove component "XR Controller"
 	* under Assets > samples > XR Interaction toolkit > v.v.v > Default Input actions, drag "XRI Default Left Controller.preset" into LeftHand Controller
 	* repeat for RightHand Controller
+	
+* for Hands:
+	* remove "XR Ray Interactor", "XR Interactor Line Visual" and "Line Renderer" 
+	* add component "XR DIrect Interactor"	
