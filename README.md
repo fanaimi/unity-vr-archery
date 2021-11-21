@@ -25,3 +25,6 @@
 * for Hands:
 	* remove "XR Ray Interactor", "XR Interactor Line Visual" and "Line Renderer" 
 	* add component "XR DIrect Interactor"	
+	
+* About Animating Hands: 
+	* check this out! https://www.youtube.com/watch?v=DxKWq7z4Xao&ab_channel=JustinPBarnett-VRGameDev
