@@ -27,7 +27,7 @@ public class ExampleBowAndArrow : MonoBehaviour
     
     
 
-    void Update()
+    void OldUpdate()
     {
         //Move Arrow
         if (Input.GetAxis(m_trigger) > 0.5f)
