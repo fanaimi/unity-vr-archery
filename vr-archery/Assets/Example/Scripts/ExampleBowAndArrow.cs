@@ -1,6 +1,9 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.XR;
+using UnityEngine.XR.Interaction.Toolkit;
 
 public class ExampleBowAndArrow : MonoBehaviour
 {
@@ -26,6 +29,50 @@ public class ExampleBowAndArrow : MonoBehaviour
     private GameObject m_nockedArrow;
     
     
+    //////////// CONTROLLER TEST START /////////////
+    [SerializeField] private GameObject RHController;
+    private XRController controller;
+
+    private void Awake()
+    {
+        // controller = GetComponent<XRController>();
+        // Debug.Log(controller);
+        // not working, controller is null
+    }
+
+    private void Update()
+    {
+       //  CheckInput();
+       // OldUpdate();
+    }
+
+    private void CheckInput()
+    {
+        
+        if (controller.inputDevice.TryGetFeatureValue(CommonUsages.grip, out float gripValue))
+        {
+            print("grip!");
+            print(gripValue);
+        }
+        
+        
+        
+        
+        if (controller.inputDevice.TryGetFeatureValue(CommonUsages.trigger, out float pointerValue))
+        {
+            print("triggered!");
+            print(pointerValue);
+        }
+        
+    }
+
+
+    void SomeTest()
+    {
+        print("someTest");
+    }
+
+    //////////// CONTROLLER TEST END   /////////////
 
     void OldUpdate()
     {
