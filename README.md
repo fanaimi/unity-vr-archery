@@ -34,3 +34,23 @@
 ## XR DEBUGGER
 	* windows > analysis > XR INTERACTION DEBUGGER (in play mode)
 	
+	
+## install OpenXR 
+	* get notes from VALEM : https://www.youtube.com/watch?v=u6Rlr2021vw&ab_channel=Valem
+```C#
+	using UnityEngine.InputSystem;
+	private ActionBasedController controller;
+	private void Awake()
+    {   
+        // action based controller with openXR
+        controller = GetComponent<ActionBasedController>();
+
+        controller.selectAction.action.performed += OnGrip;
+        controller.activateAction.action.performed += OnTrigger;
+    }
+	
+	private void OnGrip(InputAction.CallbackContext obj)
+    {
+        Debug.Log(obj.valueType);
+        print("grip");
+	}

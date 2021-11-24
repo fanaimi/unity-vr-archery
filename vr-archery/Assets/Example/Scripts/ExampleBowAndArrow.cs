@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.XR;
 using UnityEngine.XR.Interaction.Toolkit;
-
+using UnityEngine.InputSystem;
 public class ExampleBowAndArrow : MonoBehaviour
 {
 
@@ -30,23 +30,99 @@ public class ExampleBowAndArrow : MonoBehaviour
     
     
     //////////// CONTROLLER TEST START /////////////
-    [SerializeField] private GameObject RHController;
-    private XRController controller;
-
+    private bool isPressed;
+   //  private XRController controller; // 1
+   private ActionBasedController controller;
     private void Awake()
+    {   
+        /*
+         1
+         controller = GetComponent<XRController>();
+        Debug.Log(controller);
+        not working, controller is null*/
+        
+        
+        // 2. action based controller with openXR
+        controller = GetComponent<ActionBasedController>();
+        // isPressed = controller.selectAction.action.ReadValue<bool>();
+
+        controller.selectAction.action.performed += OnGrip;
+        controller.activateAction.action.performed += OnTrigger;
+    }
+
+
+    private void Start()
     {
-        // controller = GetComponent<XRController>();
-        // Debug.Log(controller);
-        // not working, controller is null
+        
+    }
+
+
+    private void OnGrip(InputAction.CallbackContext obj)
+    {
+        Debug.Log(obj.valueType);
+        
+        
+        // isPressed = controller.selectAction.action.ReadValue<bool>();
+        print("grip");
+        // print(isPressed);
+        
+        // if (Input.GetAxis(m_trigger) > 0.5f)
+        if (isPressed)
+        {
+            m_isTriggerHeld = true;
+            if(m_isArrowNocked)
+            {
+                //m_bow.LookAt(transform);
+
+                Vector3 heading = m_arrowEnd.position - m_arrowStart.position;
+                float magnitudeOfHeading = heading.magnitude;
+                heading.Normalize();
+
+                Vector3 startToHand = transform.position - m_arrowStart.position;
+                float dotProduct = Vector3.Dot(startToHand, heading);
+
+                dotProduct = Mathf.Clamp(dotProduct, 0, magnitudeOfHeading);
+                Vector3 spot = m_arrowStart.position + heading * dotProduct;
+
+                transform.position = spot;
+
+                m_bowString.position = spot;
+                m_nockedArrow.transform.position = spot;
+            }
+        }
+        //Shoot Arrow
+        // if (Input.GetAxis(m_trigger) < 0.5f && m_isTriggerHeld)
+        if (!isPressed && m_isTriggerHeld)
+        {
+            m_isTriggerHeld = false;
+            if (m_isArrowNocked)
+            {
+                m_isArrowNocked = false;
+                m_nockedArrow.transform.SetParent(null);
+                float finalShootForce = Vector3.Distance(m_bowString.position, m_arrowStart.position) * m_shootForce;
+                m_bowString.position = m_arrowStart.position;
+                m_nockedArrow.GetComponent<Rigidbody>().isKinematic = false;
+                m_nockedArrow.GetComponent<Rigidbody>().AddForce(m_nockedArrow.transform.forward * finalShootForce);
+                Destroy(m_nockedArrow, 5f);
+                m_nockedArrow = null;
+                //m_bow.localEulerAngles = new Vector3(-90, 0, 0);
+            }
+        }
+    }
+    
+    private void OnTrigger(InputAction.CallbackContext obj)
+    {
+        print("trigger");
     }
 
     private void Update()
     {
-       //  CheckInput();
+        
+       //  CheckInput1();
        // OldUpdate();
     }
 
-    private void CheckInput()
+    /*private void CheckInput1()
     {
         
         if (controller.inputDevice.TryGetFeatureValue(CommonUsages.grip, out float gripValue))
@@ -64,7 +140,9 @@ public class ExampleBowAndArrow : MonoBehaviour
             print(pointerValue);
         }
         
-    }
+    }*/
+    
+     
 
 
     void SomeTest()
