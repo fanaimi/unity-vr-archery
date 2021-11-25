@@ -46,8 +46,31 @@ public class ExampleBowAndArrow : MonoBehaviour
         controller = GetComponent<ActionBasedController>();
         // isPressed = controller.selectAction.action.ReadValue<bool>();
 
-        controller.selectAction.action.performed += OnGrip;
-        controller.activateAction.action.performed += OnTrigger;
+        controller.selectAction.action.started += OnGripStarted;
+        controller.selectAction.action.canceled += OnGripCanceled;
+        
+        // controller.activateAction.action.performed += OnTrigger;
+
+        /*
+        controller.selectAction.action.started += context =>
+        {
+            print("started");
+        };
+        
+        controller.selectAction.action.performed += context =>
+        {
+            print("Performed");
+        };
+        
+        controller.selectAction.action.canceled += context =>
+        {
+            print("canceled");
+        };
+        */
+        
+
+
+
     }
 
 
@@ -56,10 +79,23 @@ public class ExampleBowAndArrow : MonoBehaviour
         
     }
 
+    private InputAction.CallbackContext GripContext;
 
-    private void OnGrip(InputAction.CallbackContext obj)
+    private void OnGripStarted(InputAction.CallbackContext obj)
     {
+        /*GripContext = obj;
+        Debug.Log(obj.action.interactions);
+        Debug.Log(obj.canceled);
+        Debug.Log(obj.control);
+        Debug.Log(obj.duration);
+        Debug.Log(obj.interaction);
+        Debug.Log(obj.performed);
+        Debug.Log(obj.phase);
+        Debug.Log(obj.started);
+        Debug.Log(obj.time);
+        Debug.Log(obj.startTime);
         Debug.Log(obj.valueType);
+        Debug.Log(obj.valueSizeInBytes);*/
         
         
         // isPressed = controller.selectAction.action.ReadValue<bool>();
@@ -67,7 +103,7 @@ public class ExampleBowAndArrow : MonoBehaviour
         // print(isPressed);
         
         // if (Input.GetAxis(m_trigger) > 0.5f)
-        if (isPressed)
+        if (true)
         {
             m_isTriggerHeld = true;
             if(m_isArrowNocked)
@@ -90,6 +126,7 @@ public class ExampleBowAndArrow : MonoBehaviour
                 m_nockedArrow.transform.position = spot;
             }
         }
+        
         //Shoot Arrow
         // if (Input.GetAxis(m_trigger) < 0.5f && m_isTriggerHeld)
         if (!isPressed && m_isTriggerHeld)
@@ -110,10 +147,34 @@ public class ExampleBowAndArrow : MonoBehaviour
         }
     }
     
-    private void OnTrigger(InputAction.CallbackContext obj)
+    private void OnGripCanceled(InputAction.CallbackContext obj)
     {
-        print("trigger");
+        
+        print("grip performed");
+        // print(isPressed);
+        
+      
+        
+        //Shoot Arrow
+        // if (Input.GetAxis(m_trigger) < 0.5f && m_isTriggerHeld)
+        if ( m_isTriggerHeld)
+        {
+            m_isTriggerHeld = false;
+            if (m_isArrowNocked)
+            {
+                m_isArrowNocked = false;
+                m_nockedArrow.transform.SetParent(null);
+                float finalShootForce = Vector3.Distance(m_bowString.position, m_arrowStart.position) * m_shootForce;
+                m_bowString.position = m_arrowStart.position;
+                m_nockedArrow.GetComponent<Rigidbody>().isKinematic = false;
+                m_nockedArrow.GetComponent<Rigidbody>().AddForce(m_nockedArrow.transform.forward * finalShootForce);
+                Destroy(m_nockedArrow, 5f);
+                m_nockedArrow = null;
+                //m_bow.localEulerAngles = new Vector3(-90, 0, 0);
+            }
+        }
     }
+    
 
     private void Update()
     {
@@ -142,13 +203,7 @@ public class ExampleBowAndArrow : MonoBehaviour
         
     }*/
     
-     
-
-
-    void SomeTest()
-    {
-        print("someTest");
-    }
+    
 
     //////////// CONTROLLER TEST END   /////////////
 
