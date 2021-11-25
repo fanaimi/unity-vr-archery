@@ -97,14 +97,10 @@ public class ExampleBowAndArrow : MonoBehaviour
         Debug.Log(obj.valueType);
         Debug.Log(obj.valueSizeInBytes);*/
         
-        
-        // isPressed = controller.selectAction.action.ReadValue<bool>();
-        print("grip");
-        // print(isPressed);
-        
         // if (Input.GetAxis(m_trigger) > 0.5f)
         if (true)
         {
+            print("grip");
             m_isTriggerHeld = true;
             if(m_isArrowNocked)
             {
@@ -127,38 +123,16 @@ public class ExampleBowAndArrow : MonoBehaviour
             }
         }
         
-        //Shoot Arrow
-        // if (Input.GetAxis(m_trigger) < 0.5f && m_isTriggerHeld)
-        if (!isPressed && m_isTriggerHeld)
-        {
-            m_isTriggerHeld = false;
-            if (m_isArrowNocked)
-            {
-                m_isArrowNocked = false;
-                m_nockedArrow.transform.SetParent(null);
-                float finalShootForce = Vector3.Distance(m_bowString.position, m_arrowStart.position) * m_shootForce;
-                m_bowString.position = m_arrowStart.position;
-                m_nockedArrow.GetComponent<Rigidbody>().isKinematic = false;
-                m_nockedArrow.GetComponent<Rigidbody>().AddForce(m_nockedArrow.transform.forward * finalShootForce);
-                Destroy(m_nockedArrow, 5f);
-                m_nockedArrow = null;
-                //m_bow.localEulerAngles = new Vector3(-90, 0, 0);
-            }
-        }
+        
     }
     
     private void OnGripCanceled(InputAction.CallbackContext obj)
     {
-        
-        print("grip performed");
-        // print(isPressed);
-        
-      
-        
         //Shoot Arrow
         // if (Input.GetAxis(m_trigger) < 0.5f && m_isTriggerHeld)
         if ( m_isTriggerHeld)
         {
+            print("grip canceled");
             m_isTriggerHeld = false;
             if (m_isArrowNocked)
             {
@@ -245,7 +219,7 @@ public class ExampleBowAndArrow : MonoBehaviour
                 m_bowString.position = m_arrowStart.position;
                 m_nockedArrow.GetComponent<Rigidbody>().isKinematic = false;
                 m_nockedArrow.GetComponent<Rigidbody>().AddForce(m_nockedArrow.transform.forward * finalShootForce);
-                Destroy(m_nockedArrow, 5f);
+                Destroy(m_nockedArrow, 500f);
                 m_nockedArrow = null;
                 //m_bow.localEulerAngles = new Vector3(-90, 0, 0);
             }
@@ -258,7 +232,8 @@ public class ExampleBowAndArrow : MonoBehaviour
         if (other.tag == "Bow" && m_isArrowNocked == false)
         {
             m_isArrowNocked = true;
-            m_nockedArrow = Instantiate(m_prefabArrow, m_arrowStart.position, m_arrowStart.rotation, m_arrowStart);
+            // m_nockedArrow = Instantiate(m_prefabArrow, m_arrowStart.position, m_arrowStart.rotation, m_arrowStart);
+            m_nockedArrow = Instantiate(m_prefabArrow, m_arrowStart.position, Quaternion.identity, m_arrowStart);
         }
     }
     //Nock and arrow
