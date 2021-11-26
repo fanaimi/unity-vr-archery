@@ -167,13 +167,26 @@ public class ArrowController : MonoBehaviour
         controller = GetComponent<ActionBasedController>();
         // isPressed = controller.selectAction.action.ReadValue<bool>();
 
+
+        // SubscribeOLDscript();
+        SubscribeNEWscript();
+    }
+
+
+    private void SubscribeOLDscript()
+    {
+        controller.selectAction.action.started += OnGripStartedOld;
+        controller.selectAction.action.canceled += OnGripCanceledOld;
+        
+    } // SubscribeOLDscript
+    
+    
+    private void SubscribeNEWscript()
+    {
+        
         controller.selectAction.action.started += OnGripStarted;
         controller.selectAction.action.canceled += OnGripCanceled;
-        
-    
-
-
-    }
+    } // SubscribeNEWscript
 
 
     private Vector3 startPos;
@@ -260,13 +273,13 @@ public class ArrowController : MonoBehaviour
         if (isGripping)
         {
             print("grippin....");
-            n_currentHandPosition = transform.position;
+          //  n_currentHandPosition = transform.position;
             m_nockedArrow.transform.rotation = m_arrowStart.rotation;
         }
     }
 
     private bool isGripping = false;
-    private Vector3 n_currentHandPosition;
+   //  private Vector3 n_currentHandPosition;
     
     private void OnGripStarted(InputAction.CallbackContext context)
     {
@@ -282,6 +295,27 @@ public class ArrowController : MonoBehaviour
                 m_bowString
             );
         }
+        m_isTriggerHeld = true;
+        // if(m_isArrowNocked)
+        if(true)
+        {
+            //m_bow.LookAt(transform);
+
+            /*Vector3 heading = m_arrowEnd.position - m_arrowStart.position;
+            float magnitudeOfHeading = heading.magnitude;
+            heading.Normalize();
+
+            Vector3 startToHand = transform.position - m_arrowStart.position;
+            float dotProduct = Vector3.Dot(startToHand, heading);
+
+            dotProduct = Mathf.Clamp(dotProduct, 0, magnitudeOfHeading);
+            Vector3 spot = m_arrowStart.position + heading * dotProduct;
+
+            transform.position = spot;
+
+            m_bowString.position = spot;
+            m_nockedArrow.transform.position = spot;*/
+        }
 
     } // OnGripStarted
     
@@ -293,16 +327,36 @@ public class ArrowController : MonoBehaviour
             isGripping = false;
             ThrowArrow();
         }
-    } // OnGripStarted
+    } // OnGripCanceled
 
 
     private void ThrowArrow()
     {
-        m_bowString.position = m_arrowStart.position;
-        m_bowString.rotation = m_arrowStart.rotation;  //Quaternion.Euler(0,0f,0);
+        // m_bowString.position = m_arrowStart.position;
+        // m_bowString.rotation = m_arrowStart.rotation;  //Quaternion.Euler(0,0f,0);
         print("arrow thrown"); 
-        Destroy(m_nockedArrow, 3f);
-    }
+        
+        
+        // print("grip canceled");
+        m_isTriggerHeld = false;
+        // if (m_isArrowNocked)
+        if (true)
+        {
+            m_isArrowNocked = false;
+            m_nockedArrow.transform.SetParent(null);
+            float finalShootForce = Vector3.Distance(m_bowString.position, m_arrowStart.position) * m_shootForce;
+            m_bowString.position = m_arrowStart.position;
+            m_nockedArrow.GetComponent<Rigidbody>().isKinematic = false;
+            // m_nockedArrow.GetComponent<Rigidbody>().AddForce(m_nockedArrow.transform.forward * finalShootForce);
+            m_nockedArrow.GetComponent<Rigidbody>().AddForce(m_bowHand.transform.forward * finalShootForce);
+            Destroy(m_nockedArrow, 25f);
+            m_nockedArrow = null;
+            //m_bow.localEulerAngles = new Vector3(-90, 0, 0);
+        }
+        
+        
+       //  Destroy(m_nockedArrow, 3f);
+    } // throwaRROW
 
 
     //Nock and arrow
