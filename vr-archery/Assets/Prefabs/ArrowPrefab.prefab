@@ -93,7 +93,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2929184462462621935}
   serializedVersion: 2
-  m_Mass: 0.18
+  m_Mass: 0.3
   m_Drag: 0
   m_AngularDrag: 0.05
   m_UseGravity: 1
@@ -126,6 +126,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bb660e85c5bb9404d90abac3b38c70de, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  centreOfMass: {x: -7.14, y: 0, z: 0}
 --- !u!1 &5311703503721380065
 GameObject:
   m_ObjectHideFlags: 0
@@ -140,7 +141,7 @@ GameObject:
   - component: {fileID: 3675557905366023811}
   - component: {fileID: 1846272438612131729}
   m_Layer: 0
-  m_Name: Cube
+  m_Name: centreOfMass
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
