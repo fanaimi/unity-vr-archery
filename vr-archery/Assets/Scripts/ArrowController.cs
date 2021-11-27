@@ -154,6 +154,8 @@ public class ArrowController : MonoBehaviour
     private bool m_isArrowNocked;
 
     private GameObject m_nockedArrow;
+
+    [SerializeField] private Transform m_arrowOrigin;
     
     private bool isGripped = false;
     
@@ -290,9 +292,9 @@ public class ArrowController : MonoBehaviour
             // m_nockedArrow = Instantiate(m_prefabArrow, m_bowString.position, m_bowString.rotation, m_bowString);
             m_nockedArrow = Instantiate(
                 m_prefabArrow, 
-                m_bowString.position, 
-                m_arrowStart.rotation, // *= Quaternion.Euler(0,-120f,0), 
-                m_bowString
+                m_arrowOrigin.position, // m_bowString.position, 
+                m_arrowOrigin.rotation, //m_arrowStart.rotation, // *= Quaternion.Euler(0,-120f,0), 
+                m_arrowOrigin // m_bowString
             );
         }
         m_isTriggerHeld = true;
@@ -349,7 +351,8 @@ public class ArrowController : MonoBehaviour
             m_nockedArrow.GetComponent<Rigidbody>().isKinematic = false;
             // m_nockedArrow.GetComponent<Rigidbody>().AddForce(m_nockedArrow.transform.forward * finalShootForce);
             m_nockedArrow.GetComponent<Rigidbody>().AddForce(m_bowHand.transform.forward * finalShootForce);
-            Destroy(m_nockedArrow, 25f);
+            m_nockedArrow.GetComponent<Rigidbody>().AddTorque(transform.right * 2);  // torque);;
+            Destroy(m_nockedArrow, 25f); 
             m_nockedArrow = null;
             //m_bow.localEulerAngles = new Vector3(-90, 0, 0);
         }
