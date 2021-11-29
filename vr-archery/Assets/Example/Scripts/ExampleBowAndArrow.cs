@@ -1,7 +1,10 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.XR;
+using UnityEngine.XR.Interaction.Toolkit;
+using UnityEngine.InputSystem;
 public class ExampleBowAndArrow : MonoBehaviour
 {
 
@@ -26,6 +29,50 @@ public class ExampleBowAndArrow : MonoBehaviour
     private GameObject m_nockedArrow;
     
     
+    //////////// CONTROLLER TEST START /////////////
+    private bool isPressed;
+   //  private XRController controller; // 1
+   private ActionBasedController controller;
+    private void Awake()
+    {   
+        /*
+         1
+         controller = GetComponent<XRController>();
+        Debug.Log(controller);
+        not working, controller is null*/
+        
+        
+        // 2. action based controller with openXR
+        controller = GetComponent<ActionBasedController>();
+        // isPressed = controller.selectAction.action.ReadValue<bool>();
+
+        controller.selectAction.action.started += OnGripStarted;
+        controller.selectAction.action.canceled += OnGripCanceled;
+        
+        // controller.activateAction.action.performed += OnTrigger;
+
+        /*
+        controller.selectAction.action.started += context =>
+        {
+            print("started");
+        };
+        
+        controller.selectAction.action.performed += context =>
+        {
+            print("Performed");
+        };
+        
+        controller.selectAction.action.canceled += context =>
+        {
+            print("canceled");
+        };
+        */
+        
+
+
+
+    }
+
 
     void OldUpdate()
     {
@@ -65,7 +112,7 @@ public class ExampleBowAndArrow : MonoBehaviour
                 m_bowString.position = m_arrowStart.position;
                 m_nockedArrow.GetComponent<Rigidbody>().isKinematic = false;
                 m_nockedArrow.GetComponent<Rigidbody>().AddForce(m_nockedArrow.transform.forward * finalShootForce);
-                Destroy(m_nockedArrow, 5f);
+                Destroy(m_nockedArrow, 500f);
                 m_nockedArrow = null;
                 //m_bow.localEulerAngles = new Vector3(-90, 0, 0);
             }
@@ -78,7 +125,8 @@ public class ExampleBowAndArrow : MonoBehaviour
         if (other.tag == "Bow" && m_isArrowNocked == false)
         {
             m_isArrowNocked = true;
-            m_nockedArrow = Instantiate(m_prefabArrow, m_arrowStart.position, m_arrowStart.rotation, m_arrowStart);
+            // m_nockedArrow = Instantiate(m_prefabArrow, m_arrowStart.position, m_arrowStart.rotation, m_arrowStart);
+            m_nockedArrow = Instantiate(m_prefabArrow, m_arrowStart.position, Quaternion.identity, m_arrowStart);
         }
     }
     //Nock and arrow
