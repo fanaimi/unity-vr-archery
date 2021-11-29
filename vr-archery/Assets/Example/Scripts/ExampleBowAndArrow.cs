@@ -48,27 +48,6 @@ public class ExampleBowAndArrow : MonoBehaviour
 
         controller.selectAction.action.started += OnGripStarted;
         controller.selectAction.action.canceled += OnGripCanceled;
-        
-        // controller.activateAction.action.performed += OnTrigger;
-
-        /*
-        controller.selectAction.action.started += context =>
-        {
-            print("started");
-        };
-        
-        controller.selectAction.action.performed += context =>
-        {
-            print("Performed");
-        };
-        
-        controller.selectAction.action.canceled += context =>
-        {
-            print("canceled");
-        };
-        */
-        
-
 
 
     }
