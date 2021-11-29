@@ -39,7 +39,7 @@ public class ExampleBowAndArrow : MonoBehaviour
          1
          controller = GetComponent<XRController>();
         Debug.Log(controller);
-        not working, controller is null*/
+        not working, controller is null
         
         
         // 2. action based controller with openXR
@@ -48,7 +48,7 @@ public class ExampleBowAndArrow : MonoBehaviour
 
         controller.selectAction.action.started += OnGripStarted;
         controller.selectAction.action.canceled += OnGripCanceled;
-
+*/
 
     }
 
